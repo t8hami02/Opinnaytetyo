@@ -318,7 +318,15 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/VSSettingsProvider.ref.dll"
-"Assets/RotationController.cs"
+"Assets/Scirpts/FingerCollider.cs"
+"Assets/Scirpts/Gripper.cs"
+"Assets/Scirpts/IKManager.cs"
+"Assets/Scirpts/Interactable.cs"
+"Assets/Scirpts/Interactor.cs"
+"Assets/Scirpts/Joint.cs"
+"Assets/Scirpts/MouseLook.cs"
+"Assets/Scirpts/PanelManager.cs"
+"Assets/Scirpts/PlayerMovement.cs"
 -langversion:8.0
 
 /deterministic
