@@ -68,7 +68,6 @@ public class IKManager : MonoBehaviour
 
     float CalculateSlope(Joint _joint)
     {
-        Vector3 test = joint6.transform.forward;
         float deltaTheta = 0.01f;
         float distance1 = GetDistance(endJoint.transform.position, ikTarget.transform.position - (joint6.transform.forward * 0.2f));
 

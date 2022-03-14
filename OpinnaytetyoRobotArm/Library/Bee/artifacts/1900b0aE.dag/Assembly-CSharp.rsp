@@ -105,9 +105,13 @@
 -define:ENABLE_TERRAIN
 -define:ENABLE_TILEMAP
 -define:ENABLE_TIMELINE
+-define:ENABLE_INPUT_SYSTEM
 -define:ENABLE_LEGACY_INPUT_MANAGER
+-define:STARTER_ASSETS_PACKAGES_CHECKED
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
+-r:"Assets/SteamVR/Input/Plugins/JSON.NET/Valve.Newtonsoft.Json.dll"
+-r:"C:/OAMK/Opinnaytetyo/OpinnaytetyoRobotArm/Library/PackageCache/com.unity.cinemachine@2.7.9/Runtime/ThirdParty/clipper_library.dll"
 -r:"C:/OAMK/Opinnaytetyo/OpinnaytetyoRobotArm/Library/PackageCache/com.unity.visualscripting@1.6.1/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2021.1.21f1/Editor/Data/Managed/UnityEngine/UnityEditor.CoreModule.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2021.1.21f1/Editor/Data/Managed/UnityEngine/UnityEditor.DeviceSimulatorModule.dll"
@@ -301,8 +305,17 @@
 -r:"C:/Program Files/Unity/Hub/Editor/2021.1.21f1/Editor/Data/NetStandard/Extensions/2.0.0/System.Numerics.Vectors.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2021.1.21f1/Editor/Data/NetStandard/Extensions/2.0.0/System.Runtime.InteropServices.WindowsRuntime.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2021.1.21f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Cinemachine.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/com.unity.cinemachine.editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/SteamVR.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/SteamVR_Actions.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/SteamVR_Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/SteamVR_Input_Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/SteamVR_Windows_EditorHelper.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.InputSystem.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.PlasticSCM.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Rider.Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Subsystem.Registration.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Timeline.Editor.ref.dll"
@@ -315,8 +328,25 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.VisualScripting.State.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.VisualStudio.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.VSCode.Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.Management.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.MockHMD.Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.MockHMD.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.OpenVR.Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.OpenVR.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.OpenXR.Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.OpenXR.Features.ConformanceAutomation.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.OpenXR.Features.OculusQuestSupport.Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.OpenXR.Features.OculusQuestSupport.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.OpenXR.Features.RuntimeDebugger.Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.OpenXR.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.OpenXR.TestHelpers.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.SpatialTracking.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.XR.LegacyInputHelpers.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.SpatialTracking.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.XR.LegacyInputHelpers.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/VSSettingsProvider.ref.dll"
 "Assets/Scirpts/FingerCollider.cs"
 "Assets/Scirpts/Gripper.cs"
@@ -327,6 +357,8 @@
 "Assets/Scirpts/MouseLook.cs"
 "Assets/Scirpts/PanelManager.cs"
 "Assets/Scirpts/PlayerMovement.cs"
+"Assets/Scirpts/Pointer.cs"
+"Assets/Scirpts/VRInputModule.cs"
 -langversion:8.0
 
 /deterministic
