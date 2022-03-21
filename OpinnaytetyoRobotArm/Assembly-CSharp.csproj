@@ -64,6 +64,7 @@
     <Compile Include="Assets\Scirpts\VRInputModule.cs" />
     <Compile Include="Assets\Scirpts\Gripper.cs" />
     <Compile Include="Assets\Scirpts\Interactable.cs" />
+    <Compile Include="Assets\Scirpts\CanvasHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

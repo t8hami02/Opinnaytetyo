@@ -348,6 +348,7 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.XR.LegacyInputHelpers.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/VSSettingsProvider.ref.dll"
+"Assets/Scirpts/CanvasHandler.cs"
 "Assets/Scirpts/FingerCollider.cs"
 "Assets/Scirpts/Gripper.cs"
 "Assets/Scirpts/IKManager.cs"

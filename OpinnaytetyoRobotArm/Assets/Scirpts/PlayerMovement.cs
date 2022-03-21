@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Not used with VR player
+
 public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;

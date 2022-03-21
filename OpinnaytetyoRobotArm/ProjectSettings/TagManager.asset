@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Joint1
+  - Button
   layers:
   - Default
   - TransparentFX
