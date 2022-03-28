@@ -352,14 +352,14 @@
 "Assets/Scirpts/FingerCollider.cs"
 "Assets/Scirpts/Gripper.cs"
 "Assets/Scirpts/IKManager.cs"
-"Assets/Scirpts/Interactable.cs"
-"Assets/Scirpts/Interactor.cs"
 "Assets/Scirpts/Joint.cs"
 "Assets/Scirpts/MouseLook.cs"
 "Assets/Scirpts/PanelManager.cs"
 "Assets/Scirpts/PlayerMovement.cs"
 "Assets/Scirpts/Pointer.cs"
 "Assets/Scirpts/VRInputModule.cs"
+"Assets/Scirpts/VRUIInputNew.cs"
+"Assets/Scirpts/VRUIItem.cs"
 -langversion:8.0
 
 /deterministic

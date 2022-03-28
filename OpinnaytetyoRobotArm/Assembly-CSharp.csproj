@@ -55,7 +55,6 @@
   <ItemGroup>
     <Compile Include="Assets\Scirpts\FingerCollider.cs" />
     <Compile Include="Assets\Scirpts\MouseLook.cs" />
-    <Compile Include="Assets\Scirpts\Interactor.cs" />
     <Compile Include="Assets\Scirpts\PlayerMovement.cs" />
     <Compile Include="Assets\Scirpts\Joint.cs" />
     <Compile Include="Assets\Scirpts\PanelManager.cs" />
@@ -63,8 +62,9 @@
     <Compile Include="Assets\Scirpts\IKManager.cs" />
     <Compile Include="Assets\Scirpts\VRInputModule.cs" />
     <Compile Include="Assets\Scirpts\Gripper.cs" />
-    <Compile Include="Assets\Scirpts\Interactable.cs" />
     <Compile Include="Assets\Scirpts\CanvasHandler.cs" />
+    <Compile Include="Assets\Scirpts\VRUIInputNew.cs" />
+    <Compile Include="Assets\Scirpts\VRUIItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

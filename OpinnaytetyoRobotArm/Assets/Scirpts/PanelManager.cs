@@ -48,23 +48,29 @@ public class PanelManager : MonoBehaviour
 
     public void IncreaseJoint1Rotation()
     {
-        
+        Debug.Log("Button increase was clicked");
+
         GameObject.Find("IKManager").GetComponent<IKManager>().inverseKinematicsOn = false;
 
         Vector3 y = new Vector3(0, joint1.transform.localEulerAngles.y + angle, 0);
         joint1.transform.localRotation = Quaternion.Euler(y);
 
         GameObject.Find("IKManager").GetComponent<IKManager>().SetInverseKinematicOn();
+
+        
     }
 
     public void DecreseJoint1Rotation()
     {
+        Debug.Log("Button decrese was clicked");
+
         GameObject.Find("IKManager").GetComponent<IKManager>().inverseKinematicsOn = false;
 
         Vector3 y = new Vector3(0, joint1.transform.localEulerAngles.y - angle, 0);
         joint1.transform.localRotation = Quaternion.Euler(y);
 
         GameObject.Find("IKManager").GetComponent<IKManager>().SetInverseKinematicOn();
+      
     }
 
     public void IncreaseJoint2Rotation()
