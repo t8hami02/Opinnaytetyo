@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Valve.VR;
 
+// Not in use, will be removed later
+
 public class VRInputModule : BaseInputModule
 {
     public Camera myCamera;

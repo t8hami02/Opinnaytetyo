@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+// Not in use, will be removed later
+
 public class Pointer : MonoBehaviour
 {
     public float defaultLenght = 5.0f;

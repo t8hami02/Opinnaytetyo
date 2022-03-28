@@ -358,7 +358,7 @@
 "Assets/Scirpts/PlayerMovement.cs"
 "Assets/Scirpts/Pointer.cs"
 "Assets/Scirpts/VRInputModule.cs"
-"Assets/Scirpts/VRUIInputNew.cs"
+"Assets/Scirpts/VRUIInput.cs"
 "Assets/Scirpts/VRUIItem.cs"
 -langversion:8.0
 
