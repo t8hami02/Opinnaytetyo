@@ -61,10 +61,11 @@
     <Compile Include="Assets\Scirpts\Pointer.cs" />
     <Compile Include="Assets\Scirpts\IKManager.cs" />
     <Compile Include="Assets\Scirpts\VRInputModule.cs" />
+    <Compile Include="Assets\Scirpts\VRUIInput.cs" />
     <Compile Include="Assets\Scirpts\Gripper.cs" />
     <Compile Include="Assets\Scirpts\CanvasHandler.cs" />
     <Compile Include="Assets\Scirpts\VRUIItem.cs" />
-    <Compile Include="Assets\Scirpts\VRUIInput.cs" />
+    <Compile Include="Assets\Scirpts\ViveInput.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -357,6 +357,7 @@
 "Assets/Scirpts/PanelManager.cs"
 "Assets/Scirpts/PlayerMovement.cs"
 "Assets/Scirpts/Pointer.cs"
+"Assets/Scirpts/ViveInput.cs"
 "Assets/Scirpts/VRInputModule.cs"
 "Assets/Scirpts/VRUIInput.cs"
 "Assets/Scirpts/VRUIItem.cs"
