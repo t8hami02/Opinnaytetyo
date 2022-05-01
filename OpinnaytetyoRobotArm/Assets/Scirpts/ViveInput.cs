@@ -27,6 +27,6 @@ public class ViveInput : MonoBehaviour
             isMenuActive = true;
 
         }
-        //Debug.Log("Grab trigger");
+
     }
 }

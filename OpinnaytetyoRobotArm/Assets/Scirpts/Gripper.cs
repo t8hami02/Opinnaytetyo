@@ -7,9 +7,14 @@ public class Gripper : MonoBehaviour
     public GameObject finger1;
     public GameObject finger2;
 
+    public GameObject gripper1;
+    public GameObject gripper2;
+
     public GameObject pickableObject;
 
     public float speed = 0.1f;
+
+    //private bool isGripper1 = true;
 
     private bool isOpen = true;
     private bool isMoving = false;
@@ -30,7 +35,6 @@ public class Gripper : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-         bool downG = Input.GetKeyDown(KeyCode.G);
 
         if (isOpen == true && isMoving == true)
         {          
@@ -70,10 +74,6 @@ public class Gripper : MonoBehaviour
 
         }
 
-        if (downG)
-        {
-            OpenCloseGripper();       
-        }
     }
 
     public void PullTrigger(Collider c)
@@ -114,5 +114,26 @@ public class Gripper : MonoBehaviour
 
             isMoving = true;
         }
+    }
+
+    public void ChangeGripper()
+    {
+        gripper1.SetActive(false);
+        gripper2.SetActive(true);
+
+        //if (isGripper1 == true)
+        //{
+        //    gripper1.SetActive(false);
+        //    gripper2.SetActive(true);
+
+        //    isGripper1 = false;
+        //}
+        //else
+        //{
+        //    gripper1.SetActive(true);
+        //    gripper2.SetActive(false);
+
+        //    isGripper1 = true;
+        //}
     }
 }

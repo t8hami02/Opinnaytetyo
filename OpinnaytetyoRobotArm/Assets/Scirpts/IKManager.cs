@@ -34,9 +34,9 @@ public class IKManager : MonoBehaviour
     //public GameObject gripper;
     //public GameObject pickableObject;
 
-    private bool isGripped = false;
+    //private bool isGripped = false;
 
-    public TextMeshPro test123;
+    //public TextMeshPro test123;
 
     public float ikThreshold = 0.005f;
 
@@ -149,7 +149,7 @@ public class IKManager : MonoBehaviour
         }
 
         GetJointRotation();
-        test123.SetText("Joint1: {0}\r\nJoint2: {1}\r\nJoint3: {2}\r\nJoint4: {3}\r\nJoint5: {4}\r\nJoint6: {5}",joint1RotationValue, joint2RotationValue, joint3RotationValue, joint4RotationValue, joint5RotationValue, joint6RotationValue);
+        //test123.SetText("Joint1: {0}\r\nJoint2: {1}\r\nJoint3: {2}\r\nJoint4: {3}\r\nJoint5: {4}\r\nJoint6: {5}",joint1RotationValue, joint2RotationValue, joint3RotationValue, joint4RotationValue, joint5RotationValue, joint6RotationValue);
 
         joint1InputField.text = joint1RotationValue.ToString();
         joint2InputField.text = joint2RotationValue.ToString();

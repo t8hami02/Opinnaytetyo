@@ -13,8 +13,14 @@ public class PanelManager : MonoBehaviour
     public GameObject joint5;
     public GameObject joint6;
 
-    public float speed = 10.0f;
+    //public GameObject gripper1;
+    //public GameObject gripper2;
+
+    public float speed = 3.0f;
     public float angle = 1.0f;
+
+    private bool isGripper1 = true;
+
 
     public void MoveRight()
     {
@@ -171,6 +177,22 @@ public class PanelManager : MonoBehaviour
         joint6.transform.localRotation = Quaternion.Euler(z);
 
         GameObject.Find("IKManager").GetComponent<IKManager>().SetInverseKinematicOn();
+    }
+
+    public void ChangeGripper()
+    {
+        if(isGripper1 == true)
+        {
+            isGripper1 = false;
+            GameObject.Find("ROBOTIQ_HAND-E_DEFEATURE_NO_FINGERTIPS").GetComponent<Gripper>().ChangeGripper();
+
+        }
+        else
+        {
+            isGripper1 = true;
+            GameObject.Find("EPick - ENSEMBLE 4 VENTOUSES").GetComponent<Gripper2>().ChangeGripper2();
+
+        }
     }
 
     public void SavePoint()
