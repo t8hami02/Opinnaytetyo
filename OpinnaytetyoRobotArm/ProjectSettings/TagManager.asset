@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Joint1
   - Button
+  - projectile
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX

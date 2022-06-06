@@ -6,6 +6,7 @@ public class Joint : MonoBehaviour
 {
     public Joint m_child;
     public bool rotateZAngle = false;
+    public bool isLocked = false;
     
     public Joint GetChild()
     {

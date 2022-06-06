@@ -22,12 +22,12 @@ public class IKManager : MonoBehaviour
     public GameObject joint5;
     public GameObject joint6;
 
-    public InputField joint1InputField;
-    public InputField joint2InputField;
-    public InputField joint3InputField;
-    public InputField joint4InputField;
-    public InputField joint5InputField;
-    public InputField joint6InputField;
+    public TMP_InputField joint1InputField;
+    public TMP_InputField joint2InputField;
+    public TMP_InputField joint3InputField;
+    public TMP_InputField joint4InputField;
+    public TMP_InputField joint5InputField;
+    public TMP_InputField joint6InputField;
 
     //public Input joint1InputField;
 
@@ -100,8 +100,11 @@ public class IKManager : MonoBehaviour
                     Joint current = root;
                     while (current != null)
                     {
-                        float slope = CalculateSlope(current);
-                        current.Rotate(-slope * ikRate);
+                        if(current.isLocked == false)
+                        {
+                            float slope = CalculateSlope(current);
+                            current.Rotate(-slope * ikRate);
+                        }                       
                         current = current.GetChild();
                     }
 
