@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AdvancedButtonHandler : MonoBehaviour
 {
-    public GameObject btnBasic;
     public GameObject btnTemplates;
 
     public List<GameObject> buttonsList;
@@ -15,8 +14,9 @@ public class AdvancedButtonHandler : MonoBehaviour
         showAdvancedSubButtons();
         GameObject.Find("BtnBasic").GetComponent<BasicButtonHandler>().hideBasicSubButtons();
         GameObject.Find("BtnTemplates").GetComponent<TemplatesButtonHandler>().hideTemplatesSubButtons();
-        transform.position = btnBasic.transform.position + new Vector3(0,-50,0);
-        btnTemplates.transform.position = buttonsList[buttonsList.Count - 1].transform.position + new Vector3(-160, -25, 0);
+        this.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -50, 0);
+        btnTemplates.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -650, 0);
+
 
     }
     public void hideAdvancedSubButtons()

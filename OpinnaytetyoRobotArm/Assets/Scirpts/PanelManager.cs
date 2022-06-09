@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Code that handle old panel fuction
 public class PanelManager : MonoBehaviour
 {
     public GameObject target;
@@ -197,7 +198,7 @@ public class PanelManager : MonoBehaviour
 
     public void SavePoint()
     {
-        GameObject.Find("IKManager").GetComponent<IKManager>().SaveJointRotationValues();
+        //GameObject.Find("IKManager").GetComponent<IKManager>().SaveJointRotationValues();
     }
 
     public void MoveBetweenPoints()

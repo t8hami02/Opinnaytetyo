@@ -14,10 +14,19 @@ public class ProgramPageHandler : MonoBehaviour
     public GameObject tabContent2;
     public GameObject tabContent3;
 
+    public GameObject programPage;
+    public GameObject movePage;
+    public GameObject okButton;
+    public GameObject cancelButton;
+
     public GameObject panel;
-    public int numberOfItemsInPanel = 0;
     private List<GameObject> panelButtonsList = new List<GameObject>();
+    private GameObject lastPressedButton;
+
     public List<GameObject> commandPagesList;
+
+    private bool isLastWaypointSaved = false;
+    private int selectedButtonIndex = 0;
 
     public void ShowTab1()
     {
@@ -53,11 +62,33 @@ public class ProgramPageHandler : MonoBehaviour
         }
     }
 
+    public void ShowCorrectCommandPage(string buttonText)
+    {
+        HideAllCommandPages();
+        if(buttonText == "Move")
+        {
+            commandPagesList[0].SetActive(true);
+        }
+        else if (buttonText == "Waypoint")
+        {
+            commandPagesList[1].SetActive(true);
+        }
+        else if (buttonText == "Wait")
+        {
+            commandPagesList[2].SetActive(true);
+        }
+        else if (buttonText == "Set")
+        {
+            commandPagesList[3].SetActive(true);
+        }
+
+    }
+
     public void pressMoveButton()
     {
 
-        CreateProgramButton("Move");
-        CreateProgramButton("Waypoint");
+        CreateInstantiatedButton("Move");
+        CreateInstantiatedButton("Waypoint");
 
         HideAllCommandPages();
         commandPagesList[0].SetActive(true);
@@ -66,18 +97,25 @@ public class ProgramPageHandler : MonoBehaviour
 
     public void pressWaypointButton()
     {
-
-        CreateProgramButton("Waypoint");
+        if (DoesGivenButtonTextExists("Move"))
+        {
+            CreateInstantiatedButton("Waypoint");
+        }
+        else
+        {
+            CreateInstantiatedButton("Move");
+            CreateInstantiatedButton("Waypoint");
+        }
 
         HideAllCommandPages();
         commandPagesList[1].SetActive(true);
-
+        isLastWaypointSaved = false;
     }
 
     public void pressWaitButton()
     {
 
-        CreateProgramButton("Wait");
+        CreateInstantiatedButton("Wait");
 
         HideAllCommandPages();
         commandPagesList[2].SetActive(true);
@@ -87,7 +125,7 @@ public class ProgramPageHandler : MonoBehaviour
     public void pressSetButton()
     {
 
-        CreateProgramButton("Set");
+        CreateInstantiatedButton("Set");
 
         HideAllCommandPages();
         commandPagesList[3].SetActive(true);
@@ -98,23 +136,192 @@ public class ProgramPageHandler : MonoBehaviour
     {
         if (panelButtonsList.Count > 0)
         {
-            Destroy(panelButtonsList[panelButtonsList.Count - 1]);
-            panelButtonsList.RemoveAt(panelButtonsList.Count - 1);
-            numberOfItemsInPanel--;
+
+            //if (isButtonTextGiven("Waypoint",panelButtonsList[selectedButtonIndex]))
+            //{
+            //    GameObject.Find("IKManager").GetComponent<IKManager>().RemoveAtIndex(selectedButtonIndex);
+            //}
+            Destroy(panelButtonsList[selectedButtonIndex]);
+            panelButtonsList.RemoveAt(selectedButtonIndex);
+
+            RearrangeInstantiatedButtons();
+
+            if(selectedButtonIndex < panelButtonsList.Count)
+            {
+                PressInstantiatedButton(panelButtonsList[selectedButtonIndex]);
+            }
+            else if (panelButtonsList.Count > 0)
+            {
+                PressInstantiatedButton(panelButtonsList[panelButtonsList.Count - 1]);
+            }
+
         }
 
     }
 
-    public void CreateProgramButton(string textContent)
+    public void pressSetWaypointButton()
     {
+        programPage.SetActive(false);
+        movePage.SetActive(true);
+        okButton.SetActive(true);
+        cancelButton.SetActive(true);
+    }
+
+    public void pressOKButton()
+    {
+        SavePoint();
+        isLastWaypointSaved = true;
+        programPage.SetActive(true);
+        movePage.SetActive(false);
+        okButton.SetActive(false);
+        cancelButton.SetActive(false);
+        panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().ChangeBooleanToTrue();
+    }
+
+    public void pressCancelButton()
+    {
+        programPage.SetActive(true);
+        movePage.SetActive(false);
+        okButton.SetActive(false);
+        cancelButton.SetActive(false);
+    }
+
+    public bool DoesGivenButtonTextExists( string givenText)
+    {
+
+        foreach(GameObject button in panelButtonsList)
+        {
+            if (button.GetComponentInChildren<TextMeshProUGUI>().text == givenText)
+            {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    public bool isButtonTextGiven(string givenText, GameObject button)
+    {
+        if (button.GetComponentInChildren<TextMeshProUGUI>().text == givenText)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool IsLastButtonTextWaypoint()
+    {
+        if (panelButtonsList.Count > 0)
+        {
+            if(panelButtonsList[panelButtonsList.Count - 1].GetComponentInChildren<TextMeshProUGUI>().text == "Waypoint")
+            {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    public void CreateInstantiatedButton(string textContent)
+    {
+        // Instantiate a new button on program page's robot program tree and add it to panelbuttonlist.
+        // Also define the new buttons features
         GameObject button = (GameObject)Instantiate(Resources.Load("myButton"));
-        panelButtonsList.Add(button);
+        if(panelButtonsList.Count <= 0)
+        {
+            panelButtonsList.Add(button);
+        }
+        else
+        {
+            panelButtonsList.Insert(selectedButtonIndex + 1, button);
+
+        }
         button.transform.SetParent(panel.transform);
         button.transform.localScale = Vector3.one;
         button.transform.localRotation = Quaternion.Euler(Vector3.zero);
-        button.GetComponent<RectTransform>().anchoredPosition = new Vector2(-panel.GetComponent<RectTransform>().rect.width / 2 + button.GetComponent<RectTransform>().rect.width / 2, panel.GetComponent<RectTransform>().rect.height / 2 - button.GetComponent<RectTransform>().rect.height / 2 - numberOfItemsInPanel * button.GetComponent<RectTransform>().rect.height);
+        button.transform.localPosition = Vector3.zero;
+        RearrangeInstantiatedButtons();
         button.GetComponentInChildren<TextMeshProUGUI>().text = textContent;
+        button.GetComponent<Button>().onClick.AddListener(() => { PressInstantiatedButton(button); });
 
-        numberOfItemsInPanel++;
+        //Select the instantiated button
+        if(panelButtonsList.Count > 1)
+        {
+            PressInstantiatedButton(panelButtonsList[selectedButtonIndex + 1]);
+        }
+        else
+        {
+            PressInstantiatedButton(panelButtonsList[selectedButtonIndex]);
+        }
+
     }
+
+    public void SavePoint()
+    {
+        GameObject.Find("IKManager").GetComponent<IKManager>().SaveWaypointRotationValues(GetNumberOfNonMoveButtonsBeforeThis());
+        isLastWaypointSaved = true;
+    }
+
+    public void PressInstantiatedButton(GameObject button = null)
+    {
+        if(lastPressedButton != null)
+        {
+            if (panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().getBooleanValue())
+            {
+                lastPressedButton.GetComponent<Image>().color = Color.white;
+            }
+            else
+            {
+                lastPressedButton.GetComponent<Image>().color = Color.yellow;
+            }
+        }
+        //foreach(GameObject listButton in panelButtonsList)
+        //{
+        //    listButton.GetComponent<Image>().color = Color.white;
+        //}
+        button.GetComponent<Image>().color = Color.gray;
+
+        selectedButtonIndex = panelButtonsList.IndexOf(button);
+        Debug.Log(selectedButtonIndex);
+
+        ShowCorrectCommandPage(button.GetComponentInChildren<TextMeshProUGUI>().text);
+        lastPressedButton = button;
+    }
+
+    public void RearrangeInstantiatedButtons()
+    {
+        for(int i = 0; i < panelButtonsList.Count; i++)
+        {
+            panelButtonsList[i].GetComponent<RectTransform>().anchoredPosition = new Vector3(-panel.GetComponent<RectTransform>().rect.width / 2 + panelButtonsList[i].GetComponent<RectTransform>().rect.width / 2, panel.GetComponent<RectTransform>().rect.height / 2 - panelButtonsList[i].GetComponent<RectTransform>().rect.height / 2 - i * panelButtonsList[i].GetComponent<RectTransform>().rect.height,0);
+        }
+    }
+
+    public int GetNumberOfNonMoveButtonsBeforeThis()
+    {
+        int waypoints = 0;
+
+        for(int i = 0; i < selectedButtonIndex; i++)
+        {
+            if (!isButtonTextGiven("Move", panelButtonsList[i]))
+            {
+                waypoints++;
+            }
+        }
+
+        return waypoints;
+    }
+
+    public void PressStartProgramButton()
+    {
+        GameObject.Find("IKManager").GetComponent<IKManager>().MoveBetweenPoints();
+    }
+
+    public void PressTestAddWaitButton()
+    {
+        GameObject.Find("IKManager").GetComponent<IKManager>().AddWaitButton(GetNumberOfNonMoveButtonsBeforeThis());
+        panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().ChangeBooleanToTrue();
+    }
+
 }

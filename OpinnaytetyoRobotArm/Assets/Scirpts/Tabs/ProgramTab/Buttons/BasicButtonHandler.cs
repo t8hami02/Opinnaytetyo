@@ -8,6 +8,7 @@ public class BasicButtonHandler : MonoBehaviour
 {
     public GameObject btnAdvanced;
     public GameObject btnTemplates;
+    public GameObject canvas;
 
     public List<GameObject> buttonsList;
 
@@ -17,8 +18,9 @@ public class BasicButtonHandler : MonoBehaviour
         showBasicSubButtons();
         GameObject.Find("BtnAdvanced").GetComponent<AdvancedButtonHandler>().hideAdvancedSubButtons();
         GameObject.Find("BtnTemplates").GetComponent<TemplatesButtonHandler>().hideTemplatesSubButtons();
-        btnAdvanced.transform.position = buttonsList[buttonsList.Count-1].transform.position + new Vector3(-160, -25, 0);
-        btnTemplates.transform.position = btnAdvanced.transform.position + new Vector3(0, -50, 0);
+        btnAdvanced.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -500, 0);
+        btnTemplates.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -550, 0);
+
         Debug.Log("Basic Button pressed");
 
     }

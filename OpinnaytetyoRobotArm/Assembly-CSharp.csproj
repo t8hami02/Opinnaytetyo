@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scirpts\FingerCollider.cs" />
+    <Compile Include="Assets\Scirpts\Tabs\MoveTab\TCPPostionButtonsHandler.cs" />
     <Compile Include="Assets\Scirpts\MouseLook.cs" />
     <Compile Include="Assets\Scirpts\Tabs\ProgramTab\Buttons\TemplatesButtonHandler.cs" />
     <Compile Include="Assets\Scirpts\DragTarget.cs" />
@@ -79,7 +80,8 @@
     <Compile Include="Assets\Scirpts\Tabs\ProgramTab\ProgramPageHandler.cs" />
     <Compile Include="Assets\Scirpts\Gripper2.cs" />
     <Compile Include="Assets\Scirpts\VRUIItem.cs" />
-    <Compile Include="Assets\Scirpts\Tabs\MoveTab\TCPPostionButtonsHandler.cs" />
+    <Compile Include="Assets\Scirpts\Tabs\ProgramTab\ProgramButtonBoolean.cs" />
+    <Compile Include="Assets\Scirpts\RobotProgramOrder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

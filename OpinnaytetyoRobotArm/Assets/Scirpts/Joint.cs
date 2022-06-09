@@ -25,4 +25,9 @@ public class Joint : MonoBehaviour
             transform.Rotate(Vector3.forward * _angle);
         }
     }
+
+    public bool GetRotateZAngle() 
+    { 
+        return rotateZAngle;
+    }
 }
