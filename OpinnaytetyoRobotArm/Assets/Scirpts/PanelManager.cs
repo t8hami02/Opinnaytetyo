@@ -203,7 +203,7 @@ public class PanelManager : MonoBehaviour
 
     public void MoveBetweenPoints()
     {
-        GameObject.Find("IKManager").GetComponent<IKManager>().MoveBetweenPoints();
+        GameObject.Find("IKManager").GetComponent<IKManager>().MoveBetweenPointsSwitch();
     }
 
     public void ClearPoints()

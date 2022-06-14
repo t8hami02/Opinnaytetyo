@@ -136,4 +136,10 @@ public class Gripper : MonoBehaviour
         //    isGripper1 = true;
         //}
     }
+
+    public bool IsGripperMoving()
+    {
+
+        return isMoving;
+    }
 }

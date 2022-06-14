@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RobotProgramOrder : MonoBehaviour
+public class RobotProgramOrder
 {
     // types: 1 = Waypoint, 2 = Wait, 3 = Set
     int type;

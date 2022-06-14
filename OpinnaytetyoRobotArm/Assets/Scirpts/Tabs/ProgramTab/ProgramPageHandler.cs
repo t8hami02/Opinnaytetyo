@@ -25,7 +25,6 @@ public class ProgramPageHandler : MonoBehaviour
 
     public List<GameObject> commandPagesList;
 
-    private bool isLastWaypointSaved = false;
     private int selectedButtonIndex = 0;
 
     public void ShowTab1()
@@ -109,7 +108,6 @@ public class ProgramPageHandler : MonoBehaviour
 
         HideAllCommandPages();
         commandPagesList[1].SetActive(true);
-        isLastWaypointSaved = false;
     }
 
     public void pressWaitButton()
@@ -137,22 +135,25 @@ public class ProgramPageHandler : MonoBehaviour
         if (panelButtonsList.Count > 0)
         {
 
-            //if (isButtonTextGiven("Waypoint",panelButtonsList[selectedButtonIndex]))
-            //{
-            //    GameObject.Find("IKManager").GetComponent<IKManager>().RemoveAtIndex(selectedButtonIndex);
-            //}
+            if (!isButtonTextGiven("Move", panelButtonsList[selectedButtonIndex]) && panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().getBooleanValue() == true)
+            {
+                GameObject.Find("IKManager").GetComponent<IKManager>().RemoveAtIndex(GetNumberOfNonMoveButtonsBeforeThis());
+            }
+
             Destroy(panelButtonsList[selectedButtonIndex]);
             panelButtonsList.RemoveAt(selectedButtonIndex);
 
             RearrangeInstantiatedButtons();
 
-            if(selectedButtonIndex < panelButtonsList.Count)
+            //Select another button as selected
+            if (selectedButtonIndex < panelButtonsList.Count)
             {
                 PressInstantiatedButton(panelButtonsList[selectedButtonIndex]);
             }
             else if (panelButtonsList.Count > 0)
             {
-                PressInstantiatedButton(panelButtonsList[panelButtonsList.Count - 1]);
+                selectedButtonIndex = panelButtonsList.Count - 1;
+                PressInstantiatedButton(panelButtonsList[selectedButtonIndex]);
             }
 
         }
@@ -161,6 +162,7 @@ public class ProgramPageHandler : MonoBehaviour
 
     public void pressSetWaypointButton()
     {
+
         programPage.SetActive(false);
         movePage.SetActive(true);
         okButton.SetActive(true);
@@ -169,13 +171,19 @@ public class ProgramPageHandler : MonoBehaviour
 
     public void pressOKButton()
     {
-        SavePoint();
-        isLastWaypointSaved = true;
+        if (!panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().getBooleanValue())
+        {
+            SavePoint(1);           
+            panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().ChangeBooleanToTrue();
+        }
+        else
+        {
+            GameObject.Find("IKManager").GetComponent<IKManager>().EditOrder(GetNumberOfNonMoveButtonsBeforeThis(), 1);
+        }
         programPage.SetActive(true);
         movePage.SetActive(false);
         okButton.SetActive(false);
         cancelButton.SetActive(false);
-        panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().ChangeBooleanToTrue();
     }
 
     public void pressCancelButton()
@@ -258,10 +266,9 @@ public class ProgramPageHandler : MonoBehaviour
 
     }
 
-    public void SavePoint()
+    public void SavePoint(int type)
     {
-        GameObject.Find("IKManager").GetComponent<IKManager>().SaveWaypointRotationValues(GetNumberOfNonMoveButtonsBeforeThis());
-        isLastWaypointSaved = true;
+        GameObject.Find("IKManager").GetComponent<IKManager>().AddNewOrder(GetNumberOfNonMoveButtonsBeforeThis(), type);
     }
 
     public void PressInstantiatedButton(GameObject button = null)
@@ -277,10 +284,7 @@ public class ProgramPageHandler : MonoBehaviour
                 lastPressedButton.GetComponent<Image>().color = Color.yellow;
             }
         }
-        //foreach(GameObject listButton in panelButtonsList)
-        //{
-        //    listButton.GetComponent<Image>().color = Color.white;
-        //}
+
         button.GetComponent<Image>().color = Color.gray;
 
         selectedButtonIndex = panelButtonsList.IndexOf(button);
@@ -315,13 +319,25 @@ public class ProgramPageHandler : MonoBehaviour
 
     public void PressStartProgramButton()
     {
-        GameObject.Find("IKManager").GetComponent<IKManager>().MoveBetweenPoints();
+        GameObject.Find("IKManager").GetComponent<IKManager>().MoveBetweenPointsSwitch();
     }
 
-    public void PressTestAddWaitButton()
+    public void PressAddWaitButton()
     {
-        GameObject.Find("IKManager").GetComponent<IKManager>().AddWaitButton(GetNumberOfNonMoveButtonsBeforeThis());
-        panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().ChangeBooleanToTrue();
+        if (!panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().getBooleanValue())
+        {
+            SavePoint(2);
+            panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().ChangeBooleanToTrue();
+        }        
+    }
+
+    public void PressAddSetButton()
+    {
+        if (!panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().getBooleanValue())
+        {
+            SavePoint(3);
+            panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().ChangeBooleanToTrue();
+        }       
     }
 
 }

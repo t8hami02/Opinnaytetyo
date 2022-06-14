@@ -376,6 +376,7 @@
 "Assets/Scirpts/Draggable.cs"
 "Assets/Scirpts/DragTarget.cs"
 "Assets/Scirpts/FingerCollider.cs"
+"Assets/Scirpts/GrabRotation.cs"
 "Assets/Scirpts/Gripper.cs"
 "Assets/Scirpts/Gripper2.cs"
 "Assets/Scirpts/IKManager.cs"

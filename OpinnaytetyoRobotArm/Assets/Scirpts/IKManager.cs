@@ -17,30 +17,21 @@ public class IKManager : MonoBehaviour
 
     public List<GameObject> joints;
 
-    public GameObject joint1;
-    public GameObject joint2;
-    public GameObject joint3;
-    public GameObject joint4;
-    public GameObject joint5;
-    public GameObject joint6;
+    //public GameObject joint1;
+    //public GameObject joint2;
+    //public GameObject joint3;
+    //public GameObject joint4;
+    //public GameObject joint5;
+    //public GameObject joint6;
 
     public List<TMP_InputField> jointInputFields;
 
-    public TMP_InputField joint1InputField;
-    public TMP_InputField joint2InputField;
-    public TMP_InputField joint3InputField;
-    public TMP_InputField joint4InputField;
-    public TMP_InputField joint5InputField;
-    public TMP_InputField joint6InputField;
-
-    //public Input joint1InputField;
-
-    //public GameObject gripper;
-    //public GameObject pickableObject;
-
-    //private bool isGripped = false;
-
-    //public TextMeshPro test123;
+    //public TMP_InputField joint1InputField;
+    //public TMP_InputField joint2InputField;
+    //public TMP_InputField joint3InputField;
+    //public TMP_InputField joint4InputField;
+    //public TMP_InputField joint5InputField;
+    //public TMP_InputField joint6InputField;
 
     public float ikThreshold = 0.005f;
 
@@ -52,9 +43,11 @@ public class IKManager : MonoBehaviour
 
     public float rotationSpeed = 10f;
 
-    public bool inverseKinematicsOn = true;
-    public bool moveBetweenPointsOn = false;
+    private float timer = 0;
 
+    public bool inverseKinematicsOn = true;
+    public bool isMovingBetweenPointsOn = false;
+    
     private List<int> moveOrderIndex = new List<int>(); 
 
     private List<Quaternion> joint1Values = new List<Quaternion>();
@@ -66,25 +59,27 @@ public class IKManager : MonoBehaviour
 
     private List<float> jointRotationValues = new List<float>(new float[6]);
 
-    private float joint1RotationValue;
-    private float joint2RotationValue;
-    private float joint3RotationValue;
-    private float joint4RotationValue;
-    private float joint5RotationValue;
-    private float joint6RotationValue;
+    //private float joint1RotationValue;
+    //private float joint2RotationValue;
+    //private float joint3RotationValue;
+    //private float joint4RotationValue;
+    //private float joint5RotationValue;
+    //private float joint6RotationValue;
 
     //private RobotProgramOrder test = new RobotProgramOrder();
     private List<RobotProgramOrder> robotOrders = new List<RobotProgramOrder>();
     private List<RobotProgramOrder> rearrangeRobotOrders = new List<RobotProgramOrder>();
 
+    private bool gripperSetToMove = false;
+
     float CalculateSlope(Joint _joint)
     {
         float deltaTheta = 0.01f;
-        float distance1 = GetDistance(endJoint.transform.position, ikTarget.transform.position - (joint6.transform.forward * 0.2f));
+        float distance1 = GetDistance(endJoint.transform.position, ikTarget.transform.position - (joints[5].transform.forward * 0.2f));
 
         _joint.Rotate(deltaTheta);
 
-        float distance2 = GetDistance(endJoint.transform.position, ikTarget.transform.position - (joint6.transform.forward * 0.2f));
+        float distance2 = GetDistance(endJoint.transform.position, ikTarget.transform.position - (joints[5].transform.forward * 0.2f));
 
         _joint.Rotate(-deltaTheta);
 
@@ -97,106 +92,19 @@ public class IKManager : MonoBehaviour
         //Move robots joints to the target with inverse kinematics
         if (inverseKinematicsOn == true)
         {
-            for (int i = 0; i < ikSteps; i++)
-            {
-                if (GetDistance(endJoint.transform.position, ikTarget.transform.position - (joint6.transform.forward * 0.2f)) > ikThreshold)
-                {
-                    Joint current = root;
-                    while (current != null)
-                    {
-                        if(current.isLocked == false)
-                        {
-                            float slope = CalculateSlope(current);
-                            current.Rotate(-slope * ikRate);
-                        }                       
-                        current = current.GetChild();
-                    }
-
-                }
-            }
+            InverseKinematicsCalc();
         }
-        else if(moveBetweenPointsOn == true)//move joints between saved positions
+        else if(isMovingBetweenPointsOn == true)//move joints between saved positions
         {
-            rotationSpeed = 50f * Time.fixedDeltaTime;
-
-            if(rearrangeRobotOrders.Count > 0)
-            {
-                if (rearrangeRobotOrders[listIndex].Type==1)
-                {
-                    for (int i = 0; i < joints.Count; i++)
-                    {
-
-                        if (joints[i].GetComponent<Joint>().GetRotateZAngle() == true)
-                        {
-                            joints[i].transform.rotation = Quaternion.RotateTowards(joints[i].transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[i], rotationSpeed);
-                            joints[i].transform.localEulerAngles = new Vector3(0, 0, joints[i].transform.localEulerAngles.z);
-                        }
-                        else
-                        {
-                            joints[i].transform.rotation = Quaternion.RotateTowards(joints[i].transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[i], rotationSpeed);
-                            joints[i].transform.localEulerAngles = new Vector3(0, joints[i].transform.localEulerAngles.y, 0);
-                        }
-                    }
-
-                    //joint1.transform.rotation = Quaternion.RotateTowards(joint1.transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[0], rotationSpeed);
-                    //joint1.transform.localEulerAngles = new Vector3(0, joint1.transform.localEulerAngles.y, 0);
-                    //joint2.transform.rotation = Quaternion.RotateTowards(joint2.transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[1], rotationSpeed);
-                    //joint2.transform.localEulerAngles = new Vector3(0, 0, joint2.transform.localEulerAngles.z);
-                    //joint3.transform.rotation = Quaternion.RotateTowards(joint3.transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[2], rotationSpeed);
-                    //joint3.transform.localEulerAngles = new Vector3(0, 0, joint3.transform.localEulerAngles.z);
-                    //joint4.transform.rotation = Quaternion.RotateTowards(joint4.transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[3], rotationSpeed);
-                    //joint4.transform.localEulerAngles = new Vector3(0, 0, joint4.transform.localEulerAngles.z);
-                    //joint5.transform.rotation = Quaternion.RotateTowards(joint5.transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[4], rotationSpeed);
-                    //joint5.transform.localEulerAngles = new Vector3(0, joint5.transform.localEulerAngles.y, 0);
-                    //joint6.transform.rotation = Quaternion.RotateTowards(joint6.transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[5], rotationSpeed);
-                    //joint6.transform.localEulerAngles = new Vector3(0, 0, joint6.transform.localEulerAngles.z);
-
-                    if (Quaternion.Angle(joint1.transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[0]) <= 0 &&
-                    Quaternion.Angle(joint2.transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[1]) <= 0 &&
-                    Quaternion.Angle(joint3.transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[2]) <= 0 &&
-                    Quaternion.Angle(joint4.transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[3]) <= 0 &&
-                    Quaternion.Angle(joint5.transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[4]) <= 0 &&
-                    Quaternion.Angle(joint6.transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[5]) <= 0)
-                    {
-                        if (listIndex < rearrangeRobotOrders.Count - 1)
-                        {
-                            listIndex++;
-                        }
-                        else
-                        {
-                            listIndex = 0;
-                        }
-
-                    }
-                }
-                else
-                {
-                    Debug.Log("Trying to wait");
-
-                    StartCoroutine("waiter");
-                    listIndex++;
-                }
-                
-            }
-
+            MoveBetweenPoints();
         }
 
-        GetJointRotation();
-        
+        GetJointRotation();        
 
         for (int i = 0; i < jointInputFields.Count; i++)
         {
             jointInputFields[i].text = jointRotationValues[i].ToString();
         }
-
-        //joint1InputField.text = joint1RotationValue.ToString();
-        //joint2InputField.text = joint2RotationValue.ToString();
-        //joint3InputField.text = joint3RotationValue.ToString();
-        //joint4InputField.text = joint4RotationValue.ToString();
-        //joint5InputField.text = joint5RotationValue.ToString();
-        //joint6InputField.text = joint6RotationValue.ToString();
-
-
     }
 
     float GetDistance(Vector3 _point1, Vector3 _point2)
@@ -207,8 +115,6 @@ public class IKManager : MonoBehaviour
     //Gets joints rotation values and rounds them to 2 deicmal places
     void GetJointRotation()
     {
-
-
         for(int i = 0; i < jointRotationValues.Count; i++)
         {
             if (joints[i].GetComponent<Joint>().GetRotateZAngle() == true)
@@ -221,53 +127,95 @@ public class IKManager : MonoBehaviour
             }
         }
 
-        joint1RotationValue = (float)Math.Round(joint1.transform.localEulerAngles.y, 2);
-        joint2RotationValue = (float)Math.Round(joint2.transform.localEulerAngles.z, 2);
-        joint3RotationValue = (float)Math.Round(joint3.transform.localEulerAngles.z, 2); 
-        joint4RotationValue = (float)Math.Round(joint4.transform.localEulerAngles.z, 2); 
-        joint5RotationValue = (float)Math.Round(joint5.transform.localEulerAngles.y, 2); 
-        joint6RotationValue = (float)Math.Round(joint6.transform.localEulerAngles.z, 2); 
+        // old way, remove later
+        //joint1RotationValue = (float)Math.Round(joint1.transform.localEulerAngles.y, 2);
+
     }
 
-    public void SaveJointRotationValues(int orderIndex)
+    //public void SaveJointRotationValues(int orderIndex)
+    //{
+    //    joint1Values.Add(joint1.transform.rotation);
+    //    joint2Values.Add(joint2.transform.rotation);
+    //    joint3Values.Add(joint3.transform.rotation);
+    //    joint4Values.Add(joint4.transform.rotation);
+    //    joint5Values.Add(joint5.transform.rotation);
+    //    joint6Values.Add(joint6.transform.rotation);
+
+    //    moveOrderIndex.Add(orderIndex);
+
+    //    Debug.Log("Got start values");
+    //}
+
+    public void AddNewOrder(int orderIndex, int type)
     {
-        joint1Values.Add(joint1.transform.rotation);
-        joint2Values.Add(joint2.transform.rotation);
-        joint3Values.Add(joint3.transform.rotation);
-        joint4Values.Add(joint4.transform.rotation);
-        joint5Values.Add(joint5.transform.rotation);
-        joint6Values.Add(joint6.transform.rotation);
-
-        moveOrderIndex.Add(orderIndex);
-
-        Debug.Log("Got start values");
-    }
-
-    public void SaveWaypointRotationValues(int orderIndex)
-    {
-        List<Quaternion> jointValues = new List<Quaternion>();
-
-        for (int i = 0; i < joints.Count; i++)
+        //Assign correct orderindex for robotOrders list variables
+        for (int i = 0; i < robotOrders.Count; i++)
         {
-            jointValues.Add(joints[i].transform.rotation);
+            if (orderIndex <= robotOrders[i].OrderIndex)
+            {
+                robotOrders[i].OrderIndex = robotOrders[i].OrderIndex + 1;
+            }
         }
 
-        //jointValues.Add(joint1.transform.rotation);
-        //jointValues.Add(joint2.transform.rotation);
-        //jointValues.Add(joint3.transform.rotation);
-        //jointValues.Add(joint4.transform.rotation);
-        //jointValues.Add(joint5.transform.rotation);
-        //jointValues.Add(joint6.transform.rotation);
+        if (type == 1) //Add waypoint type order
+        {
+            List<Quaternion> jointValues = new List<Quaternion>();
 
-        RobotProgramOrder waypoint = new RobotProgramOrder(1, orderIndex, jointValues);
-           
-        robotOrders.Add(waypoint);
+            for (int i = 0; i < joints.Count; i++)
+            {
+                jointValues.Add(joints[i].transform.rotation);
+            }
+
+            RobotProgramOrder waypoint = new RobotProgramOrder(type, orderIndex, jointValues);
+            robotOrders.Add(waypoint);
+        }
+        else if(type == 2) //Add wait type order
+        {
+            RobotProgramOrder wait = new RobotProgramOrder(type, orderIndex, null);
+            robotOrders.Add(wait);
+        }
+        else if (type == 3) //Add set type order
+        {
+            RobotProgramOrder set = new RobotProgramOrder(type, orderIndex, null);
+            robotOrders.Add(set);
+        }
+
+        
     }
 
-    public void AddWaitButton(int orderIndex)
+    public void EditOrder(int orderIndex, int type)
     {
-        RobotProgramOrder wait = new RobotProgramOrder(2, orderIndex, null);
-        robotOrders.Add(wait);
+        int indexInList = 0;
+        for (int i = 0; i < robotOrders.Count; i++)
+        {
+            if (robotOrders[i].OrderIndex == orderIndex)
+            {
+                indexInList = i;
+                break;
+            }
+        }
+
+        if (type == 1) //Edit waypoint type order
+        {
+            List<Quaternion> jointValues = new List<Quaternion>();
+
+            for (int i = 0; i < joints.Count; i++)
+            {
+                jointValues.Add(joints[i].transform.rotation);
+            }
+
+            robotOrders[indexInList].JointRotationValues = jointValues;
+        }
+        //else if (type == 2) //Edit wait type order
+        //{
+        //    RobotProgramOrder wait = new RobotProgramOrder(type, orderIndex, null);
+        //    robotOrders.Add(wait);
+        //}
+        //else if (type == 3) //Edit set type order
+        //{
+        //    RobotProgramOrder set = new RobotProgramOrder(type, orderIndex, null);
+        //    robotOrders.Add(set);
+        //}
     }
 
     public void ResetRotationValues()
@@ -294,26 +242,38 @@ public class IKManager : MonoBehaviour
     }
 
     public void RemoveAtIndex(int givenIndex)
-    {
-        int getIndex = moveOrderIndex.IndexOf(givenIndex);
-        moveOrderIndex.Remove(givenIndex);
+    {      
+        int indexInList = 0;
 
-        joint1Values.RemoveAt(getIndex);
-        joint2Values.RemoveAt(getIndex);
-        joint3Values.RemoveAt(getIndex);
-        joint4Values.RemoveAt(getIndex);
-        joint5Values.RemoveAt(getIndex);
-        joint6Values.RemoveAt(getIndex);
+        //foreach (RobotProgramOrder order in robotOrders)
+        //{
+        //    if (order.OrderIndex == givenIndex)
+        //    {
+        //        indexInList = robotOrders.IndexOf(order);
+        //        break;
+        //    }
+        //}
 
-        for(int i = 0; i<moveOrderIndex.Count;i++)
+        //Get the robotOrders list's index of the variable which is going to be removed 
+        for (int i = 0; i < robotOrders.Count; i++)
         {
-            if(getIndex < moveOrderIndex[i])
+            if (robotOrders[i].OrderIndex == givenIndex)
             {
-                moveOrderIndex[i]--;
+                indexInList = i;
+                break;
             }
         }
 
-        
+        robotOrders.RemoveAt(indexInList);
+
+        //Assign correct orderindex for robotOrders list variables
+        for (int i = 0; i < robotOrders.Count; i++)
+        {
+            if (givenIndex < robotOrders[i].OrderIndex)
+            {
+                robotOrders[i].OrderIndex = robotOrders[i].OrderIndex - 1;
+            }
+        }
     }
 
     public void RearrangeOrderList()
@@ -331,17 +291,17 @@ public class IKManager : MonoBehaviour
 
             }            
         }
-
     }
 
 
-    public void MoveBetweenPoints()
-    {       
+    public void MoveBetweenPointsSwitch()
+    {
+
         if (inverseKinematicsOn == true)
         {
             RearrangeOrderList();
             inverseKinematicsOn = false;
-            moveBetweenPointsOn = true;
+            isMovingBetweenPointsOn = true;
         }
         else
         {
@@ -349,21 +309,121 @@ public class IKManager : MonoBehaviour
         }
     }
 
+    public void SetInverseKinematicOff()
+    {
+        inverseKinematicsOn = false;
+        ikTarget.transform.position = joints[5].transform.position + (joints[5].transform.forward * 0.2f);
+    }
+
     public void SetInverseKinematicOn()
     {
         inverseKinematicsOn = true;
-        moveBetweenPointsOn = false;
+        isMovingBetweenPointsOn = false;
         // Set target on robots current position
-        ikTarget.transform.position = joint6.transform.position + (joint6.transform.forward * 0.2f);
+        ikTarget.transform.position = joints[5].transform.position + (joints[5].transform.forward * 0.2f);
     }
 
-    IEnumerator waiter()
+    public void InverseKinematicsCalc()
     {
-        //Wait for 3 seconds
-        Debug.Log("Starting waiting");
-        yield return new WaitForSecondsRealtime(3);
-        Debug.Log("Stopped waiting");
+        for (int i = 0; i < ikSteps; i++)
+        {
+            if (GetDistance(endJoint.transform.position, ikTarget.transform.position - (joints[5].transform.forward * 0.2f)) > ikThreshold)
+            {
+                Joint current = root;
+                while (current != null)
+                {
+                    if (current.isLocked == false)
+                    {
+                        float slope = CalculateSlope(current);
+                        current.Rotate(-slope * ikRate);
+                    }
+                    current = current.GetChild();
+                }
 
+            }
+        }
     }
 
+    public void MoveBetweenPoints()
+    {
+        rotationSpeed = 50f * Time.fixedDeltaTime;
+        if(listIndex >= rearrangeRobotOrders.Count)
+        {
+            listIndex = 0;
+        }
+
+        if (rearrangeRobotOrders.Count > 0)
+        {
+            if (rearrangeRobotOrders[listIndex].Type == 1) // waypoint type order fuction
+            {
+                for (int i = 0; i < joints.Count; i++)
+                {
+
+                    if (joints[i].GetComponent<Joint>().GetRotateZAngle() == true)
+                    {
+                        joints[i].transform.rotation = Quaternion.RotateTowards(joints[i].transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[i], rotationSpeed);
+                        joints[i].transform.localEulerAngles = new Vector3(0, 0, joints[i].transform.localEulerAngles.z);
+                    }
+                    else
+                    {
+                        joints[i].transform.rotation = Quaternion.RotateTowards(joints[i].transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[i], rotationSpeed);
+                        joints[i].transform.localEulerAngles = new Vector3(0, joints[i].transform.localEulerAngles.y, 0);
+                    }
+
+                    // Old way to do this, remove later
+                    //        //joint1.transform.rotation = Quaternion.RotateTowards(joint1.transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[0], rotationSpeed);
+                    //        //joint1.transform.localEulerAngles = new Vector3(0, joint1.transform.localEulerAngles.y, 0);
+
+                }
+
+                // process to next order if each joint is at saved point's angle
+                if (Quaternion.Angle(joints[0].transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[0]) <= 0 &&
+                Quaternion.Angle(joints[1].transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[1]) <= 0 &&
+                Quaternion.Angle(joints[2].transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[2]) <= 0 &&
+                Quaternion.Angle(joints[3].transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[3]) <= 0 &&
+                Quaternion.Angle(joints[4].transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[4]) <= 0 &&
+                Quaternion.Angle(joints[5].transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[5]) <= 0)
+                {
+                    if (listIndex < rearrangeRobotOrders.Count - 1)
+                    {
+                        listIndex++;
+                    }
+                    else
+                    {
+                        listIndex = 0;
+                    }
+
+                }
+            }
+            else if (rearrangeRobotOrders[listIndex].Type == 2) // wait type order fuction, currently waits 2 seconds at every wait order
+            {
+                timer += Time.deltaTime;
+
+                if (timer > 2)
+                {
+                    Debug.Log("Done waiting");
+
+                    listIndex++;
+                    timer = 0;
+                }
+            }
+            else if (rearrangeRobotOrders[listIndex].Type == 3) // set type order fuction, currently waits 2 seconds at every wait order
+            {
+                if(gripperSetToMove == false)
+                {
+                    gripperSetToMove = true;
+                    GameObject.Find("ROBOTIQ_HAND-E_DEFEATURE_NO_FINGERTIPS").GetComponent<Gripper>().OpenCloseGripper();                    
+                }
+                else
+                {
+                    if (!GameObject.Find("ROBOTIQ_HAND-E_DEFEATURE_NO_FINGERTIPS").GetComponent<Gripper>().IsGripperMoving())
+                    {
+                        listIndex++;
+                        gripperSetToMove = false;
+                    }
+                }
+                
+            }
+        }
+    }
 }

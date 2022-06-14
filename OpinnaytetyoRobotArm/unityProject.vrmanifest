@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.opinnaytetyorobotarm.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "C:\\OAMK\\Opinnaytetyo\\OpinnaytetyoRobotArm\\Assets\\StreamingAssets\\SteamVR\\actions.json",
+      "action_manifest_path": "C:\\UnityProjekti\\Opinnaytetyo\\OpinnaytetyoRobotArm\\Assets\\StreamingAssets\\SteamVR\\actions.json",
       "strings": {
         "en_us": {
           "name": "OpinnaytetyoRobotArm [Testing]"
