@@ -323,6 +323,11 @@ public class IKManager : MonoBehaviour
         ikTarget.transform.position = joints[5].transform.position + (joints[5].transform.forward * 0.2f);
     }
 
+    public void SetIsMovingBetweenPointsOnTrue()
+    {
+        isMovingBetweenPointsOn = true;
+    }
+
     public void InverseKinematicsCalc()
     {
         for (int i = 0; i < ikSteps; i++)
