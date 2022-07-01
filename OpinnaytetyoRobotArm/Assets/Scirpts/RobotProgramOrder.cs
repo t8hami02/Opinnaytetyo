@@ -9,14 +9,15 @@ public class RobotProgramOrder
 
     int orderIndex;
     List<Quaternion> jointRotationValues;
-    float waitTime = 0;
+    float waitTime = 2;
 
 
-    public RobotProgramOrder(int type, int orderIndex, List<Quaternion> jointValues)
+    public RobotProgramOrder(int type, int orderIndex, List<Quaternion> jointValues, float waitTime = 0)
     {
         this.Type = type;
         this.OrderIndex = orderIndex;
         this.JointRotationValues = jointValues;
+        this.WaitTime = waitTime;
     }
     public int Type { get => type; set => type = value; }
     public int OrderIndex { get => orderIndex; set => orderIndex = value; }

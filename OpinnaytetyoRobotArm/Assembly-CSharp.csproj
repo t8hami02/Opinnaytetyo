@@ -61,6 +61,7 @@
     <Compile Include="Assets\Scirpts\MouseLook.cs" />
     <Compile Include="Assets\Scirpts\Tabs\ProgramTab\Buttons\TemplatesButtonHandler.cs" />
     <Compile Include="Assets\Scirpts\DragTarget.cs" />
+    <Compile Include="Assets\Scirpts\Tabs\TestForAnimation.cs" />
     <Compile Include="Assets\Scirpts\PlayerMovement.cs" />
     <Compile Include="Assets\Scirpts\Tabs\TabButton.cs" />
     <Compile Include="Assets\Scirpts\ViveInput.cs" />
@@ -81,7 +82,9 @@
     <Compile Include="Assets\Scirpts\Tabs\ProgramTab\ProgramPageHandler.cs" />
     <Compile Include="Assets\Scirpts\Tabs\ProgramTab\ProgramButtonBoolean.cs" />
     <Compile Include="Assets\Scirpts\Gripper2.cs" />
+    <Compile Include="Assets\Scirpts\AnimationsCode\ChangeGripperHandler.cs" />
     <Compile Include="Assets\Scirpts\VRUIItem.cs" />
+    <Compile Include="Assets\Scirpts\Tabs\ProgramTab\NumbadController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

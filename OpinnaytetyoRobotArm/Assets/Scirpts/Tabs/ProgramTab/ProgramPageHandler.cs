@@ -24,8 +24,10 @@ public class ProgramPageHandler : MonoBehaviour
     private GameObject lastPressedButton;
 
     public List<GameObject> commandPagesList;
+    public TMP_InputField waitTimeField;
 
     private int selectedButtonIndex = 0;
+    private int moveButtonIndex = 0;
 
     public void ShowTab1()
     {
@@ -175,6 +177,7 @@ public class ProgramPageHandler : MonoBehaviour
         {
             SavePoint(1);           
             panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().ChangeBooleanToTrue();
+            CheckMoveButtonIndex();
         }
         else
         {
@@ -192,6 +195,25 @@ public class ProgramPageHandler : MonoBehaviour
         movePage.SetActive(false);
         okButton.SetActive(false);
         cancelButton.SetActive(false);
+    }
+
+    public void pressCodeUpButton()
+    {
+        if (selectedButtonIndex > 0)
+        {
+            selectedButtonIndex--;
+            PressInstantiatedButton(panelButtonsList[selectedButtonIndex]);
+        }
+
+    }
+
+    public void pressCodeDownButton()
+    {
+        if (selectedButtonIndex < panelButtonsList.Count - 1)
+        {
+            selectedButtonIndex++;
+            PressInstantiatedButton(panelButtonsList[selectedButtonIndex]);
+        }
     }
 
     public bool DoesGivenButtonTextExists( string givenText)
@@ -252,10 +274,10 @@ public class ProgramPageHandler : MonoBehaviour
         button.transform.localPosition = Vector3.zero;
         RearrangeInstantiatedButtons();
         button.GetComponentInChildren<TextMeshProUGUI>().text = textContent;
-        button.GetComponent<Button>().onClick.AddListener(() => { PressInstantiatedButton(button); });
+        button.GetComponent<Button>().onClick.AddListener(() => { PressInstantiatedButton(button); });      
 
         //Select the instantiated button
-        if(panelButtonsList.Count > 1)
+        if (panelButtonsList.Count > 1)
         {
             PressInstantiatedButton(panelButtonsList[selectedButtonIndex + 1]);
         }
@@ -263,12 +285,12 @@ public class ProgramPageHandler : MonoBehaviour
         {
             PressInstantiatedButton(panelButtonsList[selectedButtonIndex]);
         }
-
+        CheckMoveButtonIndex();
     }
 
-    public void SavePoint(int type)
+    public void SavePoint(int type, float waitTime = 0)
     {
-        GameObject.Find("IKManager").GetComponent<IKManager>().AddNewOrder(GetNumberOfNonMoveButtonsBeforeThis(), type);
+        GameObject.Find("IKManager").GetComponent<IKManager>().AddNewOrder(GetNumberOfNonMoveButtonsBeforeThis(), type, waitTime);
     }
 
     public void PressInstantiatedButton(GameObject button = null)
@@ -319,16 +341,38 @@ public class ProgramPageHandler : MonoBehaviour
 
     public void PressStartProgramButton()
     {
-        GameObject.Find("IKManager").GetComponent<IKManager>().MoveBetweenPointsSwitch();
+        bool allOrdersSet = true;
+        foreach(GameObject order in panelButtonsList)
+        {
+            if(order.GetComponent<ProgramButtonBoolean>().getBooleanValue() == false)
+            {
+                allOrdersSet = false;
+            }
+        }
+        if(allOrdersSet == true)
+        {
+            GameObject.Find("IKManager").GetComponent<IKManager>().MoveBetweenPointsSwitch();
+        }
+        else
+        {
+            Debug.Log("Not all orders are set");
+        }
     }
 
     public void PressAddWaitButton()
     {
+        float waitTime = float.Parse(waitTimeField.text);
         if (!panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().getBooleanValue())
         {
-            SavePoint(2);
             panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().ChangeBooleanToTrue();
-        }        
+            panelButtonsList[selectedButtonIndex].GetComponentInChildren<TextMeshProUGUI>().text += " " + waitTimeField.text;
+            SavePoint(2, waitTime);
+            CheckMoveButtonIndex();
+        }
+        else
+        {
+            GameObject.Find("IKManager").GetComponent<IKManager>().EditOrder(GetNumberOfNonMoveButtonsBeforeThis(), 2, waitTime);
+        }
     }
 
     public void PressAddSetButton()
@@ -337,7 +381,51 @@ public class ProgramPageHandler : MonoBehaviour
         {
             SavePoint(3);
             panelButtonsList[selectedButtonIndex].GetComponent<ProgramButtonBoolean>().ChangeBooleanToTrue();
+            CheckMoveButtonIndex();
         }       
     }
 
+    public void CheckMoveButtonIndex()
+    {
+        for(int i = 0; i < panelButtonsList.Count; i++)
+        {
+            if(panelButtonsList[i].GetComponentInChildren<TextMeshProUGUI>().text == "Move")
+            {
+                moveButtonIndex = i;
+                CheckMoveButton();
+                break;
+            }
+        }     
+    }
+
+    public void CheckMoveButton()
+    {
+        for (int i = moveButtonIndex + 1; i < panelButtonsList.Count; i++)
+        {
+            if (panelButtonsList[i].GetComponentInChildren<TextMeshProUGUI>().text != "Move")
+            {
+                if (panelButtonsList[i].GetComponent<ProgramButtonBoolean>().getBooleanValue() == false)
+                {
+                    panelButtonsList[moveButtonIndex].GetComponent<ProgramButtonBoolean>().ChangeBooleanToFalse();
+                    panelButtonsList[moveButtonIndex].GetComponent<Image>().color = Color.yellow;
+                    break;
+                }
+                else if ( i + 1 < panelButtonsList.Count)
+                {
+                    if (panelButtonsList[i + 1].GetComponentInChildren<TextMeshProUGUI>().text == "Move")
+                    {
+                        panelButtonsList[moveButtonIndex].GetComponent<ProgramButtonBoolean>().ChangeBooleanToTrue();
+                        panelButtonsList[moveButtonIndex].GetComponent<Image>().color = Color.white;
+                        moveButtonIndex = i + 1;
+                        CheckMoveButton();
+                    }
+                }
+                else
+                {
+                    panelButtonsList[moveButtonIndex].GetComponent<ProgramButtonBoolean>().ChangeBooleanToTrue();
+                    panelButtonsList[moveButtonIndex].GetComponent<Image>().color = Color.white;
+                }
+            }
+        }
+    }
 }

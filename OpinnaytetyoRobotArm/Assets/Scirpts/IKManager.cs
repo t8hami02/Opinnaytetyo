@@ -16,22 +16,7 @@ public class IKManager : MonoBehaviour
     public GameObject ikTarget;
 
     public List<GameObject> joints;
-
-    //public GameObject joint1;
-    //public GameObject joint2;
-    //public GameObject joint3;
-    //public GameObject joint4;
-    //public GameObject joint5;
-    //public GameObject joint6;
-
     public List<TMP_InputField> jointInputFields;
-
-    //public TMP_InputField joint1InputField;
-    //public TMP_InputField joint2InputField;
-    //public TMP_InputField joint3InputField;
-    //public TMP_InputField joint4InputField;
-    //public TMP_InputField joint5InputField;
-    //public TMP_InputField joint6InputField;
 
     public float ikThreshold = 0.005f;
 
@@ -58,15 +43,6 @@ public class IKManager : MonoBehaviour
     private List<Quaternion> joint6Values = new List<Quaternion>();
 
     private List<float> jointRotationValues = new List<float>(new float[6]);
-
-    //private float joint1RotationValue;
-    //private float joint2RotationValue;
-    //private float joint3RotationValue;
-    //private float joint4RotationValue;
-    //private float joint5RotationValue;
-    //private float joint6RotationValue;
-
-    //private RobotProgramOrder test = new RobotProgramOrder();
     private List<RobotProgramOrder> robotOrders = new List<RobotProgramOrder>();
     private List<RobotProgramOrder> rearrangeRobotOrders = new List<RobotProgramOrder>();
 
@@ -127,26 +103,10 @@ public class IKManager : MonoBehaviour
             }
         }
 
-        // old way, remove later
-        //joint1RotationValue = (float)Math.Round(joint1.transform.localEulerAngles.y, 2);
 
     }
 
-    //public void SaveJointRotationValues(int orderIndex)
-    //{
-    //    joint1Values.Add(joint1.transform.rotation);
-    //    joint2Values.Add(joint2.transform.rotation);
-    //    joint3Values.Add(joint3.transform.rotation);
-    //    joint4Values.Add(joint4.transform.rotation);
-    //    joint5Values.Add(joint5.transform.rotation);
-    //    joint6Values.Add(joint6.transform.rotation);
-
-    //    moveOrderIndex.Add(orderIndex);
-
-    //    Debug.Log("Got start values");
-    //}
-
-    public void AddNewOrder(int orderIndex, int type)
+    public void AddNewOrder(int orderIndex, int type, float waitTime = 0)
     {
         //Assign correct orderindex for robotOrders list variables
         for (int i = 0; i < robotOrders.Count; i++)
@@ -171,7 +131,7 @@ public class IKManager : MonoBehaviour
         }
         else if(type == 2) //Add wait type order
         {
-            RobotProgramOrder wait = new RobotProgramOrder(type, orderIndex, null);
+            RobotProgramOrder wait = new RobotProgramOrder(type, orderIndex, null, waitTime);
             robotOrders.Add(wait);
         }
         else if (type == 3) //Add set type order
@@ -183,7 +143,7 @@ public class IKManager : MonoBehaviour
         
     }
 
-    public void EditOrder(int orderIndex, int type)
+    public void EditOrder(int orderIndex, int type, float waitTime = 0)
     {
         int indexInList = 0;
         for (int i = 0; i < robotOrders.Count; i++)
@@ -206,11 +166,10 @@ public class IKManager : MonoBehaviour
 
             robotOrders[indexInList].JointRotationValues = jointValues;
         }
-        //else if (type == 2) //Edit wait type order
-        //{
-        //    RobotProgramOrder wait = new RobotProgramOrder(type, orderIndex, null);
-        //    robotOrders.Add(wait);
-        //}
+        else if (type == 2) //Edit wait type order
+        {
+            robotOrders[indexInList].WaitTime = waitTime;
+        }
         //else if (type == 3) //Edit set type order
         //{
         //    RobotProgramOrder set = new RobotProgramOrder(type, orderIndex, null);
@@ -244,15 +203,6 @@ public class IKManager : MonoBehaviour
     public void RemoveAtIndex(int givenIndex)
     {      
         int indexInList = 0;
-
-        //foreach (RobotProgramOrder order in robotOrders)
-        //{
-        //    if (order.OrderIndex == givenIndex)
-        //    {
-        //        indexInList = robotOrders.IndexOf(order);
-        //        break;
-        //    }
-        //}
 
         //Get the robotOrders list's index of the variable which is going to be removed 
         for (int i = 0; i < robotOrders.Count; i++)
@@ -374,11 +324,6 @@ public class IKManager : MonoBehaviour
                         joints[i].transform.rotation = Quaternion.RotateTowards(joints[i].transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[i], rotationSpeed);
                         joints[i].transform.localEulerAngles = new Vector3(0, joints[i].transform.localEulerAngles.y, 0);
                     }
-
-                    // Old way to do this, remove later
-                    //        //joint1.transform.rotation = Quaternion.RotateTowards(joint1.transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[0], rotationSpeed);
-                    //        //joint1.transform.localEulerAngles = new Vector3(0, joint1.transform.localEulerAngles.y, 0);
-
                 }
 
                 // process to next order if each joint is at saved point's angle
@@ -389,7 +334,7 @@ public class IKManager : MonoBehaviour
                 Quaternion.Angle(joints[4].transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[4]) <= 0 &&
                 Quaternion.Angle(joints[5].transform.rotation, rearrangeRobotOrders[listIndex].JointRotationValues[5]) <= 0)
                 {
-                    if (listIndex < rearrangeRobotOrders.Count - 1)
+                    if (listIndex < rearrangeRobotOrders.Count)
                     {
                         listIndex++;
                     }
@@ -404,10 +349,8 @@ public class IKManager : MonoBehaviour
             {
                 timer += Time.deltaTime;
 
-                if (timer > 2)
+                if (timer > rearrangeRobotOrders[listIndex].WaitTime)
                 {
-                    Debug.Log("Done waiting");
-
                     listIndex++;
                     timer = 0;
                 }

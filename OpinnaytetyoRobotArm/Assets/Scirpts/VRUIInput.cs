@@ -22,30 +22,55 @@ public class VRUIInput : MonoBehaviour
 
     private void HandleTriggerClicked(object sender, PointerEventArgs e)
     {
-        if (EventSystem.current.currentSelectedGameObject != null)
+        //if (EventSystem.current.currentSelectedGameObject != null)
+        //{
+        //    ExecuteEvents.Execute(EventSystem.current.currentSelectedGameObject, new PointerEventData(EventSystem.current), ExecuteEvents.submitHandler);
+        //}
+        IPointerClickHandler clickHandler = e.target.GetComponent<IPointerClickHandler>();
+        if (clickHandler == null)
         {
-            ExecuteEvents.Execute(EventSystem.current.currentSelectedGameObject, new PointerEventData(EventSystem.current), ExecuteEvents.submitHandler);
+            return;
         }
+
+
+        clickHandler.OnPointerClick(new PointerEventData(EventSystem.current));
+
     }
 
     private void HandlePointerIn(object sender, PointerEventArgs e)
     {
-        var button = e.target.GetComponent<Button>();
-        if (button != null)
+        //var button = e.target.GetComponent<Button>();
+        //if (button != null)
+        //{
+        //    button.Select();
+        //    //Debug.Log("HandlePointerIn", e.target.gameObject);
+        //}
+        IPointerEnterHandler pointerEnterHandler = e.target.GetComponent<IPointerEnterHandler>();
+        if (pointerEnterHandler == null)
         {
-            button.Select();
-            Debug.Log("HandlePointerIn", e.target.gameObject);
+            return;
         }
+
+        pointerEnterHandler.OnPointerEnter(new PointerEventData(EventSystem.current));
+
     }
 
     private void HandlePointerOut(object sender, PointerEventArgs e)
     {
 
-        var button = e.target.GetComponent<Button>();
-        if (button != null)
+        //var button = e.target.GetComponent<Button>();
+        //if (button != null)
+        //{
+        //    EventSystem.current.SetSelectedGameObject(null);
+        //    //Debug.Log("HandlePointerOut", e.target.gameObject);
+        //}
+
+        IPointerExitHandler pointerExitHandler = e.target.GetComponent<IPointerExitHandler>();
+        if (pointerExitHandler == null)
         {
-            EventSystem.current.SetSelectedGameObject(null);
-            Debug.Log("HandlePointerOut", e.target.gameObject);
+            return;
         }
+
+        pointerExitHandler.OnPointerExit(new PointerEventData(EventSystem.current));
     }
 }

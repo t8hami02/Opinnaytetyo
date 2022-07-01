@@ -1,8 +1,4 @@
-//======= Copyright (c) Valve Corporation, All rights reserved. ===============
-//
-// Purpose: Interactable that can be used to move in a circular motion
-//
-//=============================================================================
+// Modified from SteamVR CircleDrive code
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -416,13 +412,6 @@ public class GrabRotation : MonoBehaviour
 		if (rotateGameObject)
 		{
             //if (Vector3.Dot(transform.up, Vector3.up) >= 0)
-            //{
-            //    joint.transform.localRotation = start * Quaternion.AngleAxis(outAngle, localPlaneNormal);
-            //}
-            //else
-            //{
-            //    joint.transform.localRotation = start * Quaternion.AngleAxis(-outAngle, localPlaneNormal);
-            //}
 
             joint.transform.localRotation = start * Quaternion.AngleAxis(outAngle, localPlaneNormal);
         }
@@ -495,10 +484,12 @@ public class GrabRotation : MonoBehaviour
 
 					float signedAngleDelta = absAngleDelta;
 
+
 					if (dot < 0.0f)
 					{
-						signedAngleDelta = -signedAngleDelta;
-					}
+
+                        signedAngleDelta = -signedAngleDelta;
+                    }
 
 					if (limited)
 					{
@@ -551,7 +542,8 @@ public class GrabRotation : MonoBehaviour
 						outAngle += signedAngleDelta;
 						lastHandProjected = toHandProjected;
 					}
-				}
+
+                }
 			}
 		}
 	}
